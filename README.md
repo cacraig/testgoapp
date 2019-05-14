@@ -13,9 +13,9 @@ Example of wiring up Go + Oracle 12g
  (3) Sign up for dockerhub account & accept Oracle license. [https://hub.docker.com/_/oracle-database-enterprise-edition](https://hub.docker.com/_/oracle-database-enterprise-edition)  
  (4) Start Oracle docker container
  ```bash  
- 	docker pull store/oracle/database-enterprise:12.2.0.1
-    docker run -d -it -v ~/dumps:/dumps --name arms-db -p 1521:1521/tcp
- store/oracle/database-enterprise:12.2.0.1  
+ 	docker pull store/oracle/database-enterprise:12.2.0.1. 
+  docker run -d -it -v ~/dumps:/dumps --name arms-db -p 1521:1521/tcp. 
+  store/oracle/database-enterprise:12.2.0.1
  ```
  
  
