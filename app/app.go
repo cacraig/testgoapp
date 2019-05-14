@@ -3,9 +3,10 @@ package app
 import (
     "net/http"
     "fmt"
-    "html"
+    //"html"
     "log"
     "database/sql"
+    "encoding/json"
     _ "gopkg.in/goracle.v2"
 )
 
@@ -13,8 +14,29 @@ type App struct {
     DB *string
 }
 
+type DBDate struct {
+    Date string `json:"date"`
+}
+
+// respondJSON makes the response with payload as json format
+func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
+    response, err := json.Marshal(payload)
+    if err != nil {
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte(err.Error()))
+        return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(status)
+    w.Write([]byte(response))
+}
+
+// respondError makes the error response with payload as json format
+func respondError(w http.ResponseWriter, code int, message string) {
+    respondJSON(w, code, map[string]string{"error": message})
+}
+
 func (a *App) Run(p string) {
-    fmt.Sprintf("Hello, %s", p)
 
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
         db, err := sql.Open("goracle", "sys/Oradoc_db1@ORCLCDB as sysdba")
@@ -37,11 +59,21 @@ func (a *App) Run(p string) {
      
             rows.Scan(&thedate)
         }
+
+        dbdate := &DBDate{
+            Date: thedate }
+
+        res, _ := json.Marshal(dbdate)
+
+        fmt.Println(string(res))
         fmt.Printf("The DB date is: %s\n", thedate)
-        fmt.Fprintf(w, "The DB date is: %s\n", thedate)
-        fmt.Fprintf(w, "URI, %q", html.EscapeString(r.URL.Path))
+        respondJSON(w, http.StatusOK, dbdate)
+        //fmt.Fprintf(w, "The DB date is: %s\n", thedate)
+        //fmt.Fprintf(w, "URI, %q", html.EscapeString(r.URL.Path))
     })
     log.Fatal(http.ListenAndServe(p, nil))
 }
+
+
 
 
