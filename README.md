@@ -14,8 +14,7 @@ Example of wiring up Go + Oracle 12g
  (4) Start Oracle docker container
  ```bash  
   docker pull store/oracle/database-enterprise:12.2.0.1. 
-  docker run -d -it -v ~/dumps:/dumps --name arms-db -p 1521:1521/tcp. 
-  store/oracle/database-enterprise:12.2.0.1
+  docker run -d -it -v ~/dumps:/dumps --name arms-db -p 1521:1521/tcp store/oracle/database-enterprise:12.2.0.1
  ```
  
  
