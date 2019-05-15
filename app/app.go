@@ -56,12 +56,12 @@ func (a *App) Run(p string) {
      
         var thedate string
         for rows.Next() {
-     
             rows.Scan(&thedate)
         }
 
         dbdate := &DBDate{
-            Date: thedate }
+            Date: thedate
+        }
 
         res, _ := json.Marshal(dbdate)
 
